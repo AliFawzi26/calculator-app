@@ -45,11 +45,21 @@ class ControllerCalculator extends GetxController {
       } else {
         equation += '(';
       }
-    } else {
+    }
+    // دعم الجذر التربيعي
+    else if (value == "√") {
+      equation += "sqrt(";
+    }
+    // دعم π
+    else if (value == "π") {
+      equation += "3.141592653589793";
+    }
+    else {
       equation += value;
     }
     update();
   }
+
 
   void toggleFunctions() {
     showFunctions = !showFunctions;
@@ -58,9 +68,12 @@ class ControllerCalculator extends GetxController {
 
   String _evaluateEquation() {
     final expression = equation
-        .replaceAll('X', '*')
-        .replaceAll('÷', '/')
-        .replaceAll(',', '.');
+        .replaceAll('X', '*')  // استبدال علامة الضرب
+        .replaceAll('÷', '/')  // استبدال علامة القسمة
+        .replaceAll(',', '.')  // استبدال الفاصلة بفاصلة عشرية
+        .replaceAll('sqrt', 'sqrt') // لا تحتاج إلى تعديل إضافي لأنها متوافقة
+        .replaceAll('π', '3.141592653589793'); // تحويل π إلى قيمتها العددية
+
     try {
       Parser parser = Parser();
       Expression exp = parser.parse(expression);
@@ -71,6 +84,7 @@ class ControllerCalculator extends GetxController {
       return "Error";
     }
   }
+
 
   void _addToHistory(String equation, String result) {
     final timestamp = DateTime.now().toString();
